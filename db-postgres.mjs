@@ -36,17 +36,25 @@ const isRemoteDb = Boolean(
   process.env.VERCEL === '1'
 );
 
-export const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-  user: process.env.PGUSER || 'postgres',
-  password: process.env.PGPASSWORD || 'postgres',
-  host: process.env.PGHOST || 'localhost',
-  port: parseInt(process.env.PGPORT || '5432', 10),
-  database: process.env.PGDATABASE || 'postgres',
-  max: isRemoteDb ? 5 : 10,
-  idleTimeoutMillis: 30000,
-  ssl: isRemoteDb ? { rejectUnauthorized: false } : undefined
-});
+const poolConfig = process.env.DATABASE_URL
+  ? {
+      connectionString: process.env.DATABASE_URL,
+      max: isRemoteDb ? 5 : 10,
+      idleTimeoutMillis: 30000,
+      ssl: isRemoteDb ? { rejectUnauthorized: false } : undefined
+    }
+  : {
+      user: process.env.PGUSER || 'postgres',
+      password: process.env.PGPASSWORD || 'postgres',
+      host: process.env.PGHOST || 'localhost',
+      port: parseInt(process.env.PGPORT || '5432', 10),
+      database: process.env.PGDATABASE || 'postgres',
+      max: 10,
+      idleTimeoutMillis: 30000,
+      ssl: isRemoteDb ? { rejectUnauthorized: false } : undefined
+    };
+
+export const pool = new Pool(poolConfig);
 
 function hashPassword(password, salt) {
   return crypto.scryptSync(password, salt, 64).toString('hex');

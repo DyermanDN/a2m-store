@@ -389,7 +389,7 @@ export async function handleApiRequest(req, res) {
     }
 }
 
-export const server = http.createServer(async (req, res) => {
+export async function handleAppRequest(req, res) {
   let parsedUrl;
   try {
     parsedUrl = new URL(req.url || '/', 'http://localhost');
@@ -454,7 +454,10 @@ export const server = http.createServer(async (req, res) => {
       res.end(data);
     });
   }
-});
+}
+
+export const server = http.createServer(handleAppRequest);
+export default handleAppRequest;
 
 if (!process.env.VERCEL) {
   initDatabase()
