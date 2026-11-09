@@ -1,0 +1,848 @@
+/* ==========================================================================
+   A2M — GESTIÓN DE CATÁLOGO (DISEÑO DE BOUTIQUE LIMPIO Y DESPEJADO)
+   ========================================================================== */
+
+:root {
+  --bg: #f6f5f1;
+  --surface: #ffffff;
+  --pedestal: #eeece5;
+  --ink: #191614;
+  --muted: #706a62;
+  --line: #e4e1d9;
+  --line-hover: #c9c4b8;
+  --accent: #9c5a2c;
+  --green: #215e38;
+  --green-bg: #ecf6f0;
+  --red: #a12c27;
+  --red-bg: #fdf1f0;
+  --font-serif: 'Cormorant Garamond', Georgia, serif;
+  --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 1.5;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+body.modal-open {
+  overflow: hidden;
+}
+
+/* Cabecera superior minimalista */
+.admin-header {
+  background: var(--surface);
+  border-bottom: 1px solid var(--line);
+  position: sticky;
+  top: 0;
+  z-index: 40;
+}
+
+.admin-header-inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 32px;
+  height: 62px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.admin-brand {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.admin-logo {
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.admin-sep {
+  width: 1px;
+  height: 16px;
+  background: var(--line);
+}
+
+.admin-subtitle {
+  font-size: 13px;
+  color: var(--muted);
+  font-weight: 500;
+}
+
+.admin-header-right {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.admin-user-pill {
+  font-size: 12.5px;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.admin-link-store {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.admin-link-store:hover {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.admin-btn-logout {
+  background: transparent;
+  border: 1px solid var(--line);
+  color: var(--muted);
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-family: inherit;
+  font-size: 12.5px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.admin-btn-logout:hover {
+  border-color: var(--red);
+  color: var(--red);
+}
+
+/* Contenedor principal con aire */
+.admin-main {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 40px 32px 80px;
+}
+
+.admin-hero {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 32px;
+  flex-wrap: wrap;
+}
+
+.admin-hero-text h1 {
+  font-family: var(--font-serif);
+  font-size: 38px;
+  font-weight: 500;
+  color: var(--ink);
+  line-height: 1.08;
+  margin-bottom: 6px;
+}
+
+.admin-metrics-inline {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13.5px;
+  color: var(--muted);
+  flex-wrap: wrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.admin-metrics-inline strong {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.admin-metrics-inline .dot {
+  color: #c5bfb4;
+}
+
+/* Botones principales */
+.btn-primary {
+  background: var(--ink);
+  color: #ffffff;
+  border: 1px solid var(--ink);
+  padding: 11px 22px;
+  border-radius: 999px;
+  font-family: inherit;
+  font-size: 13.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+  white-space: nowrap;
+}
+
+.btn-primary:hover {
+  background: #302b26;
+}
+
+.btn-secondary {
+  background: var(--surface);
+  color: var(--ink);
+  border: 1px solid var(--line-hover);
+  padding: 10px 18px;
+  border-radius: 999px;
+  font-family: inherit;
+  font-size: 13.5px;
+  font-weight: 500;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+
+.btn-secondary:hover {
+  border-color: var(--ink);
+}
+
+.btn-sm {
+  padding: 7px 14px;
+  font-size: 12.5px;
+}
+
+/* Barra de pestañas y buscador */
+.admin-nav-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding-bottom: 18px;
+  margin-bottom: 28px;
+  border-bottom: 1px solid var(--line);
+  flex-wrap: wrap;
+}
+
+.admin-tabs {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.nav-tab {
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--muted);
+  padding: 8px 16px;
+  border-radius: 999px;
+  font-family: inherit;
+  font-size: 13.5px;
+  font-weight: 500;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.15s ease;
+}
+
+.nav-tab span {
+  font-size: 11.5px;
+  opacity: 0.7;
+  font-variant-numeric: tabular-nums;
+}
+
+.nav-tab:hover {
+  color: var(--ink);
+  background: rgba(25, 22, 20, 0.04);
+}
+
+.nav-tab.is-active {
+  background: var(--ink);
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.nav-tab.is-active span {
+  opacity: 0.85;
+}
+
+.nav-divider {
+  width: 1px;
+  height: 20px;
+  background: var(--line);
+  margin: 0 4px;
+}
+
+.admin-search-box {
+  position: relative;
+  width: 260px;
+}
+
+.admin-search-box svg {
+  position: absolute;
+  left: 13px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 15px;
+  height: 15px;
+  color: var(--muted);
+  pointer-events: none;
+}
+
+.admin-search-box input {
+  width: 100%;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 8px 14px 8px 36px;
+  font-family: inherit;
+  font-size: 13px;
+  color: var(--ink);
+  outline: none;
+  transition: border-color 0.15s ease;
+}
+
+.admin-search-box input:focus {
+  border-color: var(--ink);
+}
+
+/* ==========================================================================
+   GRILLA VISUAL DE TARJETAS DE PERFUMES (ESTÉTICA DE TIENDA, NO TABLA CRUD)
+   ========================================================================== */
+.perfumes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(268px, 1fr));
+  gap: 24px;
+}
+
+.perfume-card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.perfume-card:hover {
+  border-color: var(--line-hover);
+  box-shadow: 0 10px 28px rgba(25, 22, 20, 0.05);
+}
+
+.card-media {
+  position: relative;
+  height: 210px;
+  background: var(--pedestal);
+  display: grid;
+  place-items: center;
+  padding: 22px;
+}
+
+.card-media img {
+  max-height: 164px;
+  max-width: 100%;
+  object-fit: contain;
+  transition: transform 0.25s ease;
+}
+
+.perfume-card:hover .card-media img {
+  transform: scale(1.03);
+}
+
+.card-status-pill {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 11.5px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  font-family: inherit;
+  transition: opacity 0.15s ease;
+}
+
+.card-status-pill:hover {
+  opacity: 0.85;
+}
+
+.card-status-pill.is-in {
+  background: rgba(255, 255, 255, 0.92);
+  color: var(--green);
+}
+
+.card-status-pill.is-out {
+  background: var(--red-bg);
+  color: var(--red);
+}
+
+.card-cat-tag {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  font-size: 11px;
+  color: var(--muted);
+  background: rgba(255, 255, 255, 0.75);
+  padding: 3px 9px;
+  border-radius: 999px;
+}
+
+.card-body {
+  padding: 18px 20px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+}
+
+.card-brand {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+}
+
+.card-title-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.card-title {
+  font-family: var(--font-serif);
+  font-size: 21px;
+  font-weight: 600;
+  color: var(--ink);
+  line-height: 1.18;
+}
+
+.card-price {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--ink);
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.card-notes {
+  font-size: 12.5px;
+  color: var(--muted);
+  margin-top: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Pie de tarjeta limpio y sin amontonamiento */
+.card-footer {
+  padding: 12px 20px 16px;
+  border-top: 1px solid #f0ede6;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.card-stock-Quick {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--bg);
+  padding: 3px 6px;
+  border-radius: 999px;
+}
+
+.stock-btn {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: none;
+  background: var(--surface);
+  color: var(--ink);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
+}
+
+.stock-btn:hover {
+  background: var(--ink);
+  color: #ffffff;
+}
+
+.stock-count {
+  font-size: 12.5px;
+  font-weight: 600;
+  min-width: 44px;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+
+.card-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.card-btn-edit {
+  background: transparent;
+  border: 1px solid var(--line-hover);
+  color: var(--ink);
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-family: inherit;
+  font-size: 12.5px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.card-btn-edit:hover {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: #ffffff;
+}
+
+.card-btn-del {
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--muted);
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-family: inherit;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.card-btn-del:hover,
+.card-btn-del.is-confirming {
+  background: var(--red-bg);
+  color: var(--red);
+  font-weight: 600;
+}
+
+/* ==========================================================================
+   VISTA DE PEDIDOS DE CLIENTES (TARJETAS LIMPIAS)
+   ========================================================================== */
+.orders-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.order-row-card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 20px 24px;
+  display: grid;
+  grid-template-columns: 160px 1.2fr 1fr 140px 170px;
+  align-items: center;
+  gap: 20px;
+}
+
+.order-col-id strong {
+  display: block;
+  font-size: 14.5px;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+
+.order-col-id span {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.order-col-address strong {
+  display: block;
+  font-size: 13.5px;
+  color: var(--ink);
+}
+
+.order-col-address span {
+  font-size: 12.5px;
+  color: var(--muted);
+}
+
+.order-col-items {
+  font-size: 13px;
+  color: var(--ink);
+  line-height: 1.45;
+}
+
+.order-col-total strong {
+  display: block;
+  font-size: 15px;
+  font-variant-numeric: tabular-nums;
+}
+
+.order-col-total span {
+  font-size: 11.5px;
+  color: var(--muted);
+}
+
+.empty-state {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 64px 20px;
+  color: var(--muted);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+}
+
+/* ==========================================================================
+   MODAL SIMPLE, LIMPIO Y DESPEJADO (UNA SOLA COLUMNA)
+   ========================================================================== */
+.modal-scrim {
+  position: fixed;
+  inset: 0;
+  background: rgba(20, 18, 16, 0.5);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+
+.modal-scrim.is-open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.modal-sheet {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  max-width: 540px;
+  width: 100%;
+  max-height: calc(100dvh - 40px);
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 24px 60px rgba(20, 18, 16, 0.2);
+  overflow: hidden;
+}
+
+.modal-header {
+  padding: 20px 26px 16px;
+  border-bottom: 1px solid var(--line);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+}
+
+.modal-header h2 {
+  font-family: var(--font-serif);
+  font-size: 26px;
+  font-weight: 500;
+  color: var(--ink);
+}
+
+.modal-close {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: none;
+  background: transparent;
+  color: var(--muted);
+  font-size: 16px;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+}
+
+.modal-close:hover {
+  background: var(--bg);
+  color: var(--ink);
+}
+
+.modal-form {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.modal-body {
+  padding: 22px 26px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  scrollbar-width: thin;
+  scrollbar-color: #cfc9be transparent;
+}
+
+/* Bloque de foto horizontal y limpio */
+.photo-uploader {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 14px;
+  background: var(--bg);
+  border-radius: 12px;
+}
+
+.photo-preview-box {
+  width: 80px;
+  height: 80px;
+  border-radius: 10px;
+  background: var(--pedestal);
+  display: grid;
+  place-items: center;
+  padding: 8px;
+  flex-shrink: 0;
+}
+
+.photo-preview-box img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.photo-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+  min-width: 0;
+}
+
+.photo-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.photo-hint {
+  font-size: 12px;
+  color: var(--muted);
+  margin-bottom: 4px;
+}
+
+.photo-btns-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Filas de campos con buen espacio */
+.fields-row-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.fields-row-3 {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr 1fr;
+  gap: 14px;
+}
+
+.field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.field-group label {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.label-opt {
+  font-weight: 400;
+  color: var(--muted);
+}
+
+.field-input {
+  width: 100%;
+  background: var(--surface);
+  border: 1px solid var(--line-hover);
+  border-radius: 10px;
+  padding: 10px 13px;
+  font-family: inherit;
+  font-size: 14px;
+  color: var(--ink);
+  outline: none;
+  transition: border-color 0.15s ease;
+}
+
+.field-input-sm {
+  padding: 7px 11px;
+  font-size: 12.5px;
+}
+
+.field-input:focus {
+  border-color: var(--ink);
+}
+
+.field-textarea {
+  resize: vertical;
+  min-height: 76px;
+  line-height: 1.5;
+}
+
+.modal-footer {
+  padding: 16px 26px;
+  border-top: 1px solid var(--line);
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  background: var(--surface);
+  flex-shrink: 0;
+}
+
+/* Toast */
+.admin-toast {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  background: var(--ink);
+  color: #ffffff;
+  padding: 12px 18px;
+  border-radius: 999px;
+  font-size: 13px;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.18);
+  z-index: 200;
+}
+
+@media (max-width: 960px) {
+  .order-row-card {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+}
+
+@media (max-width: 600px) {
+  .fields-row-2,
+  .fields-row-3 {
+    grid-template-columns: 1fr;
+  }
+  .photo-btns-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}

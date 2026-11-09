@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="es" data-view="collection">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>A2M — Perfumería & Galería de Fragancias</title>
+  <meta name="description" content="A2M — Alta perfumería y catálogo exclusivo. Fragancias árabes, de diseñador y nicho en una experiencia inmersiva." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="gallery.css" />
+  <link rel="stylesheet" href="catalog.css" />
+  <link rel="stylesheet" href="wipe.css" />
+  <link rel="stylesheet" href="auth.css" />
+</head>
+<body data-view="collection">
+
+  <!-- SVG icon sprite -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <symbol id="i-search" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M15.5 15.5 20 20" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></symbol>
+    <symbol id="i-heart" viewBox="0 0 24 24"><path d="M12 20s-7.5-4.6-7.5-10.2A4.3 4.3 0 0 1 12 7.4a4.3 4.3 0 0 1 7.5 2.4C19.5 15.4 12 20 12 20z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></symbol>
+    <symbol id="i-heart-fill" viewBox="0 0 24 24"><path d="M12 20s-7.5-4.6-7.5-10.2A4.3 4.3 0 0 1 12 7.4a4.3 4.3 0 0 1 7.5 2.4C19.5 15.4 12 20 12 20z" fill="currentColor" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></symbol>
+    <symbol id="i-bag" viewBox="0 0 24 24"><path d="M5.5 8.5h13l-1 11.5h-11z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M9 8.5V7a3 3 0 0 1 6 0v1.5" fill="none" stroke="currentColor" stroke-width="1.6"/></symbol>
+    <symbol id="i-close" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></symbol>
+    <symbol id="i-chevron" viewBox="0 0 24 24"><path d="m7 10 5 5 5-5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-filter" viewBox="0 0 24 24"><path d="M4 7h10M18 7h2M4 17h4M12 17h8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><circle cx="16" cy="7" r="2" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="10" cy="17" r="2" fill="none" stroke="currentColor" stroke-width="1.6"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-user" viewBox="0 0 24 24"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><circle cx="12" cy="7" r="4" fill="none" stroke="currentColor" stroke-width="1.6"/></symbol>
+  </svg>
+
+  <!-- UNIFIED PERSISTENT HEADER (Statically pinned at top) -->
+  <header class="unified-header">
+    <div class="header-left">
+      <a class="brand-logo-link" id="brand-home-btn" href="index.html" title="A2M Galería">A2M</a>
+    </div>
+
+    <!-- THE STATIC IPHONE BUTTON - PINNED DEAD CENTER -->
+    <div class="header-switcher">
+      <nav class="segmented-control" id="segmented-switch" role="tablist" aria-label="Selector de vista" data-active="collection">
+        <div class="segmented-indicator" id="segmented-indicator" aria-hidden="true"></div>
+        <button class="segmented-btn is-active" id="btn-collection" role="tab" aria-selected="true" data-view="collection">
+          <span>Colección</span>
+        </button>
+        <button class="segmented-btn" id="btn-catalog" role="tab" aria-selected="false" data-view="catalog">
+          <span>Catálogo</span>
+        </button>
+      </nav>
+    </div>
+
+    <!-- HEADER TOOLS ON THE RIGHT (Catalog search / fav / bag) -->
+    <div class="header-tools-wrap">
+      <form class="search" id="search-form" role="search">
+        <label for="search-input" class="visually-hidden">Buscar fragancias</label>
+        <svg class="icon" aria-hidden="true"><use href="#i-search"/></svg>
+        <input id="search-input" type="search" placeholder="Buscar" autocomplete="off" />
+      </form>
+      <button class="icon-btn" id="fav-view-btn" aria-label="Favoritos (0)">
+        <svg class="icon" aria-hidden="true"><use href="#i-heart"/></svg>
+        <span class="icon-count" id="fav-count" hidden>0</span>
+      </button>
+      <button class="icon-btn" id="bag-btn" aria-label="Bolsa (0 artículos)">
+        <svg class="icon" aria-hidden="true"><use href="#i-bag"/></svg>
+        <span class="icon-count" id="bag-count" hidden>0</span>
+      </button>
+      <button class="icon-btn" id="user-btn" aria-label="Mi Cuenta" title="Mi Cuenta">
+        <svg class="icon" aria-hidden="true"><use href="#i-user"/></svg>
+        <span class="user-active-dot" id="user-active-dot" hidden></span>
+      </button>
+    </div>
+
+    <!-- Confirmación al agregar a la bolsa -->
+    <div class="added-pop" id="added-pop" role="status" aria-live="polite" hidden>
+      <p class="added-pop-title"><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg> Agregado a tu bolsa</p>
+      <div class="added-pop-item" id="added-pop-item"></div>
+      <div class="added-pop-actions">
+        <button class="btn btn-outline" id="added-view-bag">Ver bolsa</button>
+        <button class="btn btn-solid" id="added-close">Seguir comprando</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- LUMINOUS HORIZONTAL WIPE LINE -->
+  <div class="wipe-line" id="wipe-line" aria-hidden="true"></div>
+
+  <!-- VIEW STAGE (Both views coexist in the same persistent shell) -->
+  <div class="view-stage">
+
+    <!-- =========================================================
+         VIEW 1: COLECCIÓN (3D Ambient Perfume Gallery)
+         ========================================================= -->
+    <div id="view-gallery">
+      <main class="gallery-viewport" id="gallery-viewport">
+        <section class="gallery-intro" aria-label="Introducción a la colección">
+          <div><p class="collection-eyebrow">LA COLECCIÓN PRIVADA</p><h1>Aromas excepcionales. <em>Curaduría íntima.</em></h1></div>
+          <span class="collection-edition">TOM FORD · CINCO ESENCIAS FIRMA</span>
+        </section>
+        <div class="camera-stage" id="camera-stage">
+          <div class="stone-wall"><div class="stone-wall-relief"></div></div>
+          <div class="ceiling-soffit"></div>
+          <div class="floor-ledge"></div>
+
+          <!-- 5 Fragrance Bays -->
+          <div class="bays-container">
+            <article class="fragrance-bay" role="button" tabindex="0" data-index="0" aria-label="Explore Lost Cherry" aria-expanded="false" style="--plinth-h:190px; --bottle-image:url('assets/lost-cherry.webp')">
+              <div class="ceiling-lamp"></div><div class="spotlight-beam"></div><div class="wall-glow"></div>
+              <div class="product-display"><div class="bottle-stage"><img class="perfume-photo" src="assets/lost-cherry.webp" alt="Tom Ford Lost Cherry, 50 ml" width="768" height="768" decoding="async" draggable="false" /></div>
+              <div class="plinth"><div class="plinth-veins"></div><span class="plinth-number">01</span><span class="plinth-price">S/ 405</span><span class="plinth-name-hint">Lost Cherry</span><span class="plinth-volume">EAU DE PARFUM · 50 ML</span></div></div>
+            </article>
+
+            <article class="fragrance-bay" role="button" tabindex="0" data-index="1" aria-label="Explore Rose Prick" aria-expanded="false" style="--plinth-h:145px; --bottle-image:url('assets/rose-prick.webp')">
+              <div class="ceiling-lamp"></div><div class="spotlight-beam"></div><div class="wall-glow"></div>
+              <div class="product-display"><div class="bottle-stage"><img class="perfume-photo" src="assets/rose-prick.webp" alt="Tom Ford Rose Prick, 50 ml" width="768" height="768" decoding="async" draggable="false" /></div>
+              <div class="plinth"><div class="plinth-veins"></div><span class="plinth-number">02</span><span class="plinth-price">S/ 405</span><span class="plinth-name-hint">Rose Prick</span><span class="plinth-volume">EAU DE PARFUM · 50 ML</span></div></div>
+            </article>
+
+            <article class="fragrance-bay is-lit" role="button" tabindex="0" data-index="2" aria-label="Explore Tobacco Vanille" aria-expanded="false" style="--plinth-h:215px; --bottle-image:url('assets/tobacco-vanille.webp')">
+              <div class="ceiling-lamp"></div><div class="spotlight-beam"></div><div class="wall-glow"></div>
+              <div class="product-display"><div class="bottle-stage"><img class="perfume-photo" src="assets/tobacco-vanille.webp" alt="Tom Ford Tobacco Vanille, 50 ml" width="768" height="768" decoding="async" draggable="false" /></div>
+              <div class="plinth"><div class="plinth-veins"></div><span class="plinth-number">03</span><span class="plinth-price">S/ 300</span><span class="plinth-name-hint">Tobacco Vanille</span><span class="plinth-volume">EAU DE PARFUM · 50 ML</span></div></div>
+            </article>
+
+            <article class="fragrance-bay" role="button" tabindex="0" data-index="3" aria-label="Explore Neroli Portofino" aria-expanded="false" style="--plinth-h:160px; --bottle-image:url('assets/neroli-portofino.webp')">
+              <div class="ceiling-lamp"></div><div class="spotlight-beam"></div><div class="wall-glow"></div>
+              <div class="product-display"><div class="bottle-stage"><img class="perfume-photo" src="assets/neroli-portofino.webp" alt="Tom Ford Neroli Portofino, 50 ml" width="768" height="768" decoding="async" draggable="false" /></div>
+              <div class="plinth"><div class="plinth-veins"></div><span class="plinth-number">04</span><span class="plinth-price">S/ 300</span><span class="plinth-name-hint">Neroli Portofino</span><span class="plinth-volume">EAU DE PARFUM · 50 ML</span></div></div>
+            </article>
+
+            <article class="fragrance-bay" role="button" tabindex="0" data-index="4" aria-label="Explore Oud Wood" aria-expanded="false" style="--plinth-h:185px; --bottle-image:url('assets/oud-wood.webp')">
+              <div class="ceiling-lamp"></div><div class="spotlight-beam"></div><div class="wall-glow"></div>
+              <div class="product-display"><div class="bottle-stage"><img class="perfume-photo" src="assets/oud-wood.webp" alt="Tom Ford Oud Wood, 50 ml" width="768" height="768" decoding="async" draggable="false" /></div>
+              <div class="plinth"><div class="plinth-veins"></div><span class="plinth-number">05</span><span class="plinth-price">S/ 300</span><span class="plinth-name-hint">Oud Wood</span><span class="plinth-volume">EAU DE PARFUM · 50 ML</span></div></div>
+            </article>
+          </div>
+
+          <div class="niche-vignette"></div>
+        </div>
+        <canvas id="rain-canvas" aria-hidden="true"></canvas>
+      </main>
+
+      <!-- Floating Product Detail Card in Gallery -->
+      <aside class="detail-card" id="detail-card" aria-live="polite">
+        <button class="detail-close" id="detail-close" aria-label="Cerrar detalles">×</button>
+        <div class="detail-category" id="detail-category">Eau de Parfum</div>
+        <h2 class="detail-title" id="detail-title">Tobacco Vanille</h2>
+        <p class="detail-desc" id="detail-desc"></p>
+        <div class="detail-section-label">Notas Olfativas</div>
+        <div class="notes-list" id="detail-notes">
+          <span class="note-pill">Hoja de tabaco</span>
+          <span class="note-pill">Vainilla</span>
+          <span class="note-pill">Haba tonka</span>
+        </div>
+        <div class="detail-section-label">Volumen del Frasco</div>
+        <div class="size-row">
+          <div class="size-options">
+            <button class="size-btn active" data-size="50ml">50 ml</button>
+          </div>
+          <div class="detail-price-display" id="detail-price">S/ 300</div>
+        </div>
+        <button class="add-to-bag-btn" id="add-to-bag-btn">Añadir a la bolsa — S/ 300</button>
+        <button class="back-gallery-btn" id="back-gallery-btn">← Volver a la galería</button>
+      </aside>
+
+      <!-- Bottom Bar in Gallery (Socials & Update Date) -->
+      <footer class="bottom-bar">
+        <div class="bottom-bar-social" aria-label="Redes sociales">
+          <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" class="social-icon-btn" aria-label="Facebook" title="Facebook">
+            <svg viewBox="0 0 24 24" class="social-svg" aria-hidden="true"><path fill="currentColor" d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+          </a>
+          <a href="https://tiktok.com" target="_blank" rel="noopener noreferrer" class="social-icon-btn" aria-label="TikTok" title="TikTok">
+            <svg viewBox="0 0 24 24" class="social-svg" aria-hidden="true"><path fill="currentColor" d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64c.298-.002.595.042.88.13V9.4a6.33 6.33 0 0 0-1-.08A6.34 6.34 0 0 0 3 15.66a6.34 6.34 0 0 0 10.82 4.46 6.27 6.27 0 0 0 1.9-4.48V8.71a8.18 8.18 0 0 0 4.87 1.6V6.86a4.85 4.85 0 0 1-1-.17z"/></svg>
+          </a>
+          <a href="https://wa.me/" target="_blank" rel="noopener noreferrer" class="social-icon-btn" aria-label="WhatsApp" title="WhatsApp">
+            <svg viewBox="0 0 24 24" class="social-svg" aria-hidden="true"><path fill="currentColor" d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2m.01 1.67c2.2 0 4.26.86 5.82 2.41a8.18 8.18 0 0 1 2.41 5.83c0 4.54-3.7 8.24-8.24 8.24-1.48 0-2.93-.4-4.2-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.21 8.21 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.24-8.24m4.52 11.58c-.19-.09-1.12-.55-1.3-.61-.17-.06-.3-.09-.43.09-.12.19-.49.61-.6.74-.11.12-.22.14-.41.05-.19-.09-.8-.3-1.53-.94-.57-.51-.95-1.13-1.06-1.32-.11-.19-.01-.29.08-.38.09-.09.19-.22.28-.34.1-.11.13-.19.19-.32.06-.13.03-.24-.02-.34-.04-.09-.43-1.03-.59-1.41-.15-.37-.31-.32-.43-.33h-.37c-.12 0-.32.05-.49.24-.17.19-.65.64-.65 1.55 0 .92.67 1.8 1.33 2.68 1.9 2.51 3.51 2.87 4.24 2.87.67 0 1.29-.27 1.49-.69.21-.42.21-.78.15-.88-.06-.09-.19-.15-.38-.24"/></svg>
+          </a>
+        </div>
+        <div class="bottom-bar-center">
+          <span class="pulse-dot"></span>
+          <span>Selecciona una fragancia para descubrirla</span>
+        </div>
+        <span>ACTUALIZACIÓN NOVIEMBRE 2026</span>
+      </footer>
+    </div>
+
+    <!-- =========================================================
+         VIEW 2: CATÁLOGO (Full Nike-style E-commerce PLP/PDP)
+         ========================================================= -->
+    <div id="view-catalog" style="clip-path: polygon(0 0, 0 0, 0 100%, 0 100%); pointer-events: none;">
+      <div class="promo-strip">
+        <p>Envío de cortesía en pedidos desde S/ 150 · Muestras incluidas en cada compra.</p>
+      </div>
+
+      <main id="main">
+        <!-- PLP (Listado) -->
+        <div id="plp">
+          <section class="campaign" aria-labelledby="campaign-title">
+            <div class="campaign-copy">
+              <h2 id="campaign-title">Viste el clima.</h2>
+              <p>Fragancias frescas, amaderadas y ambarinas en 30, 50 y 100 ml. Encuentra la indicada para tu día.</p>
+              <div class="campaign-actions">
+                <a class="btn btn-light" href="catalog.html?category=arabe" data-shortcut="arabe">Ver perfumes árabes</a>
+                <a class="btn btn-ghost-light" href="catalog.html?category=disenador" data-shortcut="disenador">Perfumes de diseñador</a>
+              </div>
+            </div>
+            <img class="campaign-bottle" src="assets/tobacco-vanille.webp" alt="" width="768" height="768" decoding="sync" />
+          </section>
+
+          <div class="plp-bar" id="plp-bar">
+            <h1 class="plp-title"><span id="plp-title-text">Fragancias</span> <span class="plp-count" id="plp-count">(0)</span></h1>
+            <div class="plp-controls">
+              <button class="text-btn" id="filters-toggle" aria-controls="filters" aria-expanded="true">
+                <span id="filters-toggle-label">Ocultar filtros</span>
+                <svg class="icon" aria-hidden="true"><use href="#i-filter"/></svg>
+              </button>
+              <label class="sort">
+                <span>Ordenar por</span>
+                <select id="sort-select">
+                  <option value="featured">Destacados</option>
+                  <option value="newest">Más recientes</option>
+                  <option value="price-desc">Precio: mayor a menor</option>
+                  <option value="price-asc">Precio: menor a mayor</option>
+                </select>
+                <svg class="icon" aria-hidden="true"><use href="#i-chevron"/></svg>
+              </label>
+            </div>
+          </div>
+
+          <!-- Píldoras de subcategorías y colecciones de fragancias -->
+          <nav class="subnav-pills-bar" id="subnav-pills-bar" aria-label="Subcategorías y colecciones">
+            <div class="pills-track" id="pills-track" role="tablist"></div>
+          </nav>
+
+          <div class="plp-body" id="plp-body">
+            <aside class="filters" id="filters" aria-label="Filtros">
+              <div class="filters-sheet-head">
+                <p>Filtros</p>
+                <button class="icon-btn" id="filters-close" aria-label="Cerrar filtros"><svg class="icon" aria-hidden="true"><use href="#i-close"/></svg></button>
+              </div>
+              <div id="filter-groups"></div>
+              <div class="filters-sheet-foot">
+                <button class="btn btn-outline" id="filters-clear">Limpiar</button>
+                <button class="btn btn-solid" id="filters-apply">Ver resultados</button>
+              </div>
+            </aside>
+
+            <section class="grid-wrap" aria-labelledby="plp-title-text">
+              <div class="active-chips" id="active-chips"></div>
+              <ul class="product-grid" id="product-grid"></ul>
+              <div class="empty" id="empty-state" hidden>
+                <p class="empty-title">No encontramos fragancias con estos filtros.</p>
+                <p>Prueba eliminando algún filtro o buscando otro término.</p>
+                <button class="btn btn-solid" id="empty-clear">Restablecer todos los filtros</button>
+              </div>
+            </section>
+          </div>
+        </div>
+
+        <!-- PDP (Detalle) -->
+        <article class="pdp" id="pdp" hidden></article>
+      </main>
+
+      <footer class="site-footer">
+        <div class="footer-cols">
+          <div>
+            <p class="footer-head">Ayuda</p>
+            <ul>
+              <li>Estado del pedido</li>
+              <li>Envíos y entregas</li>
+              <li>Devoluciones</li>
+              <li>Contacto</li>
+            </ul>
+          </div>
+          <div>
+            <p class="footer-head">Comprar</p>
+            <ul>
+              <li><a href="catalog.html?gender=women" data-shortcut="women">Mujer</a></li>
+              <li><a href="catalog.html?gender=men" data-shortcut="men">Hombre</a></li>
+              <li><a href="catalog.html?gender=unisex" data-shortcut="unisex">Unisex</a></li>
+              <li><a href="catalog.html?sort=newest" data-shortcut="new">Novedades</a></li>
+            </ul>
+          </div>
+          <div>
+            <p class="footer-head">A2M</p>
+            <ul>
+              <li><a href="index.html">La galería de fragancias</a></li>
+            </ul>
+          </div>
+          <p class="footer-mark">A2M</p>
+        </div>
+        <p class="footer-legal">
+          La fotografía de productos pertenece a sus respectivos creadores. A2M es una galería y tienda de alta perfumería en Perú. Todos los precios están expresados en Soles (S/).
+        </p>
+      </footer>
+    </div>
+  </div>
+
+  <!-- BOLSA DE COMPRA (DRAWER LATERAL) -->
+  <div class="scrim" id="scrim" hidden></div>
+  <aside class="drawer" id="bag-drawer" role="dialog" aria-modal="true" aria-labelledby="bag-title" hidden>
+    <div class="drawer-head">
+      <h2 id="bag-title">Bolsa</h2>
+      <button class="icon-btn" id="bag-close" aria-label="Cerrar bolsa"><svg class="icon" aria-hidden="true"><use href="#i-close"/></svg></button>
+    </div>
+    <div class="drawer-body" id="bag-list"></div>
+    <div class="drawer-foot" id="bag-foot">
+      <div class="sum-row"><span>Subtotal</span><span id="bag-subtotal">S/ 0</span></div>
+      <div class="sum-row muted"><span>Envío</span><span id="bag-shipping">Gratis</span></div>
+      <div class="sum-row total"><span>Total</span><span id="bag-total">S/ 0</span></div>
+      <button class="btn btn-solid btn-block" id="checkout-btn">Continuar compra</button>
+      <p class="checkout-note" id="checkout-note" hidden></p>
+    </div>
+  </aside>
+
+  <!-- MI CUENTA & PERFIL (DRAWER LATERAL) -->
+  <aside class="drawer account-drawer" id="account-drawer" role="dialog" aria-modal="true" aria-labelledby="account-title" hidden>
+    <div class="drawer-head">
+      <div class="account-head-info">
+        <span class="account-kicker">Perfil y despacho</span>
+        <h2 id="account-title">Mi cuenta</h2>
+      </div>
+      <button class="icon-btn" id="account-close" aria-label="Cerrar mi cuenta"><svg class="icon" aria-hidden="true"><use href="#i-close"/></svg></button>
+    </div>
+
+    <!-- VIEW 1: AUTH (LOGIN & REGISTRO) -->
+    <div class="drawer-body account-body" id="auth-view">
+      <div class="auth-tabs" role="tablist">
+        <button class="auth-tab is-active" id="tab-login" role="tab" aria-selected="true" data-tab="login">Iniciar sesión</button>
+        <button class="auth-tab" id="tab-register" role="tab" aria-selected="false" data-tab="register">Crear cuenta</button>
+      </div>
+
+      <!-- FORM INICIAR SESIÓN -->
+      <form class="auth-form" id="form-login">
+        <p class="auth-intro">Ingresa con tu número de DNI para gestionar tu dirección de envío y revisar tus compras.</p>
+        
+        <div class="form-group">
+          <label for="login-dni" class="form-label">DNI (8 dígitos)</label>
+          <input type="text" id="login-dni" class="form-input" placeholder="Ej. 74839201" maxlength="8" inputmode="numeric" required autocomplete="username" />
+        </div>
+
+        <div class="form-group">
+          <label for="login-password" class="form-label">Contraseña</label>
+          <input type="password" id="login-password" class="form-input" placeholder="••••••••" required autocomplete="current-password" />
+        </div>
+
+        <div class="auth-feedback" id="login-feedback" hidden></div>
+
+        <button type="submit" class="btn btn-solid btn-block" id="btn-submit-login">
+          <span>Iniciar sesión</span>
+        </button>
+      </form>
+
+      <!-- FORM REGISTRO -->
+      <form class="auth-form" id="form-register" hidden>
+        <p class="auth-intro">Regístrate con tu DNI para guardar tu dirección de entrega y agilizar tus pedidos.</p>
+        
+        <div class="form-group">
+          <label for="reg-dni" class="form-label">DNI (8 dígitos)</label>
+          <input type="text" id="reg-dni" class="form-input" placeholder="Ej. 74839201" maxlength="8" inputmode="numeric" required />
+          <span class="form-hint">Se utilizará para la boleta de venta y confirmación de entrega.</span>
+        </div>
+
+        <div class="form-group">
+          <label for="reg-password" class="form-label">Contraseña</label>
+          <input type="password" id="reg-password" class="form-input" placeholder="Mínimo 6 caracteres" minlength="6" required />
+        </div>
+
+        <div class="auth-feedback" id="reg-feedback" hidden></div>
+
+        <button type="submit" class="btn btn-solid btn-block" id="btn-submit-register">
+          <span>Crear cuenta</span>
+        </button>
+      </form>
+    </div>
+
+    <!-- VIEW 2: PERFIL (DATOS DE ENTREGA: CIUDAD, DISTRITO, DIRECCIÓN, REFERENCIA) -->
+    <div class="drawer-body account-body" id="profile-view" hidden>
+      <div class="profile-badge-card">
+        <div class="profile-badge-left">
+          <div class="profile-avatar">
+            <svg class="icon" aria-hidden="true"><use href="#i-user"/></svg>
+          </div>
+          <div class="profile-meta">
+            <span class="profile-label">Documento de identidad</span>
+            <h3 class="profile-dni" id="profile-dni-display">DNI --------</h3>
+          </div>
+        </div>
+        <span class="profile-status-pill">Sesión activa</span>
+      </div>
+
+      <div class="profile-section-divider">
+        <span>Dirección de entrega</span>
+      </div>
+
+      <form class="profile-form" id="form-profile">
+        <div class="form-row-2">
+          <div class="form-group">
+            <label for="prof-ciudad" class="form-label">Ciudad / Dpto.</label>
+            <input type="text" id="prof-ciudad" class="form-input" placeholder="Ej. Lima" required />
+          </div>
+
+          <div class="form-group">
+            <label for="prof-distrito" class="form-label">Distrito</label>
+            <input type="text" id="prof-distrito" class="form-input" placeholder="Ej. Miraflores" required />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="prof-direccion" class="form-label">Dirección exacta</label>
+          <input type="text" id="prof-direccion" class="form-input" placeholder="Av. Larco 1045, Dpto 502" required />
+        </div>
+
+        <div class="form-group">
+          <label for="prof-referencia" class="form-label">Referencia</label>
+          <textarea id="prof-referencia" class="form-textarea" rows="2" placeholder="Frente al parque, edificio de ladrillo visto"></textarea>
+        </div>
+
+        <div class="auth-feedback" id="profile-feedback" hidden></div>
+
+        <button type="submit" class="btn btn-solid btn-block" id="btn-save-profile">
+          <span>Guardar dirección</span>
+        </button>
+      </form>
+
+      <div class="profile-section-divider">
+        <span>Historial de compras</span>
+      </div>
+      <div id="profile-orders-list" class="profile-orders-list">
+        <p class="profile-hint">Aún no registras compras con tu cuenta.</p>
+      </div>
+
+      <div class="profile-footer-actions">
+        <button type="button" class="btn btn-outline btn-block" id="btn-logout">
+          Cerrar sesión
+        </button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MODAL DE CHECKOUT & PASARELA NIUBIZ / YAPE -->
+  <aside class="order-modal-scrim" id="order-scrim" hidden>
+    <div class="order-modal-card" id="order-modal-card" role="dialog" aria-modal="true" aria-labelledby="order-title">
+      <div class="order-modal-head">
+        <div class="order-modal-head-text">
+          <span class="order-modal-kicker">Despacho y facturación</span>
+          <h2 id="order-title">Resumen y pago</h2>
+          <p class="order-modal-sub">Verifica los detalles de tu entrega y elige tu medio de pago.</p>
+        </div>
+        <button type="button" class="icon-btn" id="order-modal-close-icon" aria-label="Cerrar ventana">
+          <svg class="icon" aria-hidden="true"><use href="#i-close"/></svg>
+        </button>
+      </div>
+
+      <div class="order-modal-body" id="order-modal-body">
+        <!-- Rellenado dinámico por JS -->
+      </div>
+
+      <div class="order-modal-foot" id="order-modal-foot">
+        <button type="button" class="btn btn-solid btn-block" id="btn-pay-order">
+          <span>Pagar con Tarjeta</span>
+        </button>
+        <button type="button" class="btn btn-outline btn-block" id="btn-close-order">
+          Pagar más tarde
+        </button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- SCRIPTS -->
+  <script src="rain-engine.js"></script>
+  <script src="app.js"></script>
+  <script src="catalog-data.js"></script>
+  <script src="catalog.js"></script>
+  <script src="wipe.js"></script>
+  <script src="auth.js"></script>
+</body>
+</html>

@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>A2M — Catálogo y Pedidos</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="admin.css" />
+</head>
+<body>
+
+  <!-- CABECERA MINIMALISTA -->
+  <header class="admin-header">
+    <div class="admin-header-inner">
+      <div class="admin-brand">
+        <a href="catalog.html" class="admin-logo">A2M</a>
+        <span class="admin-sep"></span>
+        <span class="admin-subtitle">Gestión de tienda</span>
+      </div>
+
+      <div class="admin-header-right">
+        <span class="admin-user-pill" id="admin-dni-badge">DNI 72772860</span>
+        <a href="catalog.html" class="admin-link-store">Ver tienda pública →</a>
+        <button type="button" class="admin-btn-logout" id="btn-admin-logout">Salir</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- CONTENEDOR PRINCIPAL -->
+  <main class="admin-main">
+
+    <!-- CABECERA DE PÁGINA CON RESUMEN DISCRETO -->
+    <section class="admin-hero">
+      <div class="admin-hero-text">
+        <h1>Catálogo de perfumes</h1>
+        <div class="admin-metrics-inline">
+          <span><strong id="stat-prods">0</strong> perfumes</span>
+          <span class="dot">·</span>
+          <span><strong id="stat-stock">0</strong> unidades en stock</span>
+          <span class="dot">·</span>
+          <span><strong id="stat-oos">0</strong> agotados</span>
+          <span class="dot">·</span>
+          <span>Ventas: <strong id="stat-sales">S/ 0.00</strong> (<span id="stat-orders">0</span> pedidos)</span>
+        </div>
+      </div>
+
+      <button type="button" class="btn-primary" id="btn-create-prod">
+        + Agregar perfume
+      </button>
+    </section>
+
+    <!-- BARRA DE NAVEGACIÓN Y BÚSQUEDA -->
+    <div class="admin-nav-bar">
+      <div class="admin-tabs" role="tablist">
+        <button type="button" class="nav-tab is-active" data-view="prods" data-cat="all">
+          Todos <span id="count-all">0</span>
+        </button>
+        <button type="button" class="nav-tab" data-view="prods" data-cat="arabe">
+          Árabes <span id="count-arabe">0</span>
+        </button>
+        <button type="button" class="nav-tab" data-view="prods" data-cat="disenador">
+          Diseñador <span id="count-disenador">0</span>
+        </button>
+        <button type="button" class="nav-tab" data-view="prods" data-cat="nicho">
+          Nicho <span id="count-nicho">0</span>
+        </button>
+        <span class="nav-divider"></span>
+        <button type="button" class="nav-tab" data-view="orders" id="tab-btn-orders">
+          Pedidos de clientes <span id="count-orders">0</span>
+        </button>
+      </div>
+
+      <div class="admin-search-box" id="search-box-wrap">
+        <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6">
+          <circle cx="9" cy="9" r="5.5"></circle>
+          <path d="M13.2 13.2L17 17" stroke-linecap="round"></path>
+        </svg>
+        <input type="search" id="input-search" placeholder="Buscar por nombre o marca..." />
+      </div>
+    </div>
+
+    <!-- VISTA 1: GRILLA VISUAL DE PERFUMES (LIMPIA Y ESPACIADA) -->
+    <section id="view-prods">
+      <div id="prods-grid" class="perfumes-grid">
+        <div class="empty-state">Cargando catálogo...</div>
+      </div>
+    </section>
+
+    <!-- VISTA 2: PEDIDOS DE CLIENTES -->
+    <section id="view-orders" hidden>
+      <div id="orders-list" class="orders-grid">
+        <div class="empty-state">Cargando pedidos...</div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- MODAL LIMPIO Y LIGERO: AGREGAR / EDITAR PERFUME -->
+  <div class="modal-scrim" id="modal-prod-scrim" hidden>
+    <div class="modal-sheet" role="dialog" aria-modal="true" aria-labelledby="modal-prod-title">
+      
+      <div class="modal-header">
+        <h2 id="modal-prod-title">Editar perfume</h2>
+        <button type="button" class="modal-close" id="btn-close-modal" aria-label="Cerrar">✕</button>
+      </div>
+
+      <form id="form-product" class="modal-form">
+        <input type="hidden" id="prod-edit-id" />
+
+        <div class="modal-body" id="modal-scrollable-body">
+          
+          <!-- FOTO DEL PERFUME -->
+          <div class="photo-uploader">
+            <div class="photo-preview-box">
+              <img id="preview-img" src="assets/catalog/khamrah.webp" alt="Vista previa" />
+            </div>
+            <div class="photo-actions">
+              <span class="photo-title">Fotografía del frasco</span>
+              <p class="photo-hint">Sube una imagen desde tu computadora o pega la ruta del archivo.</p>
+              <div class="photo-btns-row">
+                <label for="prod-file-upload" class="btn-secondary btn-sm">
+                  Subir desde mi PC
+                </label>
+                <input type="file" id="prod-file-upload" accept="image/*" hidden />
+                <input type="text" id="prod-imagen" class="field-input field-input-sm" placeholder="assets/catalog/khamrah.webp" required />
+              </div>
+            </div>
+          </div>
+
+          <!-- NOMBRE Y MARCA -->
+          <div class="fields-row-2">
+            <div class="field-group">
+              <label for="prod-nombre">Nombre del perfume</label>
+              <input type="text" id="prod-nombre" class="field-input" placeholder="Ej. Khamrah Qahwa" required />
+            </div>
+            <div class="field-group">
+              <label for="prod-marca">Marca</label>
+              <input type="text" id="prod-marca" class="field-input" placeholder="Ej. Lattafa, Tom Ford" required />
+            </div>
+          </div>
+
+          <!-- CATEGORÍA, PRECIO Y STOCK -->
+          <div class="fields-row-3">
+            <div class="field-group">
+              <label for="prod-categoria">Categoría</label>
+              <select id="prod-categoria" class="field-input" required>
+                <option value="arabe">Árabe</option>
+                <option value="disenador">Diseñador</option>
+                <option value="nicho">Nicho</option>
+              </select>
+            </div>
+
+            <div class="field-group">
+              <label for="prod-precio">Precio (S/)</label>
+              <input type="number" id="prod-precio" class="field-input" step="0.5" min="1" placeholder="65.00" required />
+            </div>
+
+            <div class="field-group">
+              <label for="prod-stock">Stock (unidades)</label>
+              <input type="number" id="prod-stock" class="field-input" min="0" placeholder="15" required />
+            </div>
+          </div>
+
+          <!-- NOTAS PRINCIPALES (SIMPLE) -->
+          <div class="field-group">
+            <label for="prod-notas">Notas principales <span class="label-opt">(opcional, separadas por coma)</span></label>
+            <input type="text" id="prod-notas" class="field-input" placeholder="Ej. Vainilla, Canela, Café, Ámbar" />
+          </div>
+
+          <!-- DESCRIPCIÓN BREVE -->
+          <div class="field-group">
+            <label for="prod-desc">Descripción breve <span class="label-opt">(opcional)</span></label>
+            <textarea id="prod-desc" class="field-input field-textarea" rows="3" placeholder="Breve reseña del aroma para el catálogo..."></textarea>
+          </div>
+
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn-secondary" id="btn-cancel-modal">Cancelar</button>
+          <button type="submit" class="btn-primary" id="btn-save-prod">Guardar cambios</button>
+        </div>
+      </form>
+
+    </div>
+  </div>
+
+  <script src="admin.js"></script>
+</body>
+</html>

@@ -1,0 +1,420 @@
+/* =========================================================
+   A2M - UNIFIED HEADER & HORIZONTAL WIPE TRANSITION
+   Persistent static segmented control with luminous wipe
+   ========================================================= */
+
+/* Persistent Static Header */
+.unified-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 76px;
+  padding: 0 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 45;
+  pointer-events: none;
+  background: transparent;
+  border-bottom: 1px solid transparent;
+  box-sizing: border-box;
+  transition: background 0.35s ease, border-color 0.35s ease;
+}
+
+.unified-header > * {
+  pointer-events: auto;
+}
+
+body[data-view="catalog"] .unified-header {
+  background: rgba(250, 248, 245, 0.92);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(26, 23, 20, 0.08);
+}
+
+.brand-logo-link {
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+  font-size: 19px;
+  font-weight: 500;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: #fbf8f3;
+  transition: color 0.35s ease, opacity 0.2s ease;
+}
+
+.brand-logo-link:hover {
+  opacity: 0.85;
+}
+
+body[data-view="catalog"] .brand-logo-link {
+  color: #1a1714;
+}
+
+/* THE STATIC IPHONE BUTTON - MATHEMATICALLY PINNED AT 50% HORIZONTAL & 50% VERTICAL */
+.header-switcher {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 46;
+  pointer-events: auto;
+}
+
+.segmented-control {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  padding: 4px;
+  background: #110f13;
+  border: 1px solid rgba(255, 235, 210, 0.18);
+  border-radius: 999px;
+  box-shadow: 0 8px 26px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  user-select: none;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+.segmented-indicator {
+  position: absolute;
+  top: 4px;
+  bottom: 4px;
+  left: 4px;
+  width: calc(50% - 4px);
+  background: linear-gradient(180deg, #2b262d, #1a171d);
+  border: 1px solid rgba(255, 235, 210, 0.24);
+  border-radius: 999px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.16);
+  transition: transform 0.32s cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.segmented-control[data-active="collection"] .segmented-indicator {
+  transform: translateX(0);
+}
+
+.segmented-control[data-active="catalog"] .segmented-indicator {
+  transform: translateX(100%);
+}
+
+.segmented-btn {
+  position: relative;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 98px;
+  padding: 8px 18px;
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #8b8379;
+  background: transparent;
+  border: none;
+  text-decoration: none;
+  cursor: pointer;
+  border-radius: 999px;
+  transition: color 0.25s ease, transform 0.15s ease;
+  white-space: nowrap;
+}
+
+.segmented-btn:hover {
+  color: #e2d9cd;
+}
+
+.segmented-btn.is-active {
+  color: #fff;
+  text-shadow: 0 0 12px rgba(255, 235, 210, 0.4);
+}
+
+.segmented-btn:active {
+  transform: scale(0.96);
+}
+
+/* Header Tools on the Right — Fixed Geometry Across Both Views */
+.header-tools-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.header-tools-wrap .search {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 180px;
+  height: 40px;
+  padding: 0 10px 0 12px;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  box-sizing: border-box;
+  transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+}
+
+.header-tools-wrap .search .icon {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  transition: color 0.3s ease;
+}
+
+.header-tools-wrap .search input {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  background: none;
+  border: 0;
+  outline: none;
+  font-size: 14.5px;
+  transition: color 0.3s ease;
+}
+
+.header-tools-wrap .icon-btn {
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  transition: background-color 0.25s ease, color 0.3s ease;
+}
+
+/* Dark Theme (Colección) */
+body[data-view="collection"] .header-tools-wrap .search {
+  background: rgba(255, 235, 210, 0.07);
+  border-color: rgba(255, 235, 210, 0.14);
+  color: #f2eade;
+}
+
+body[data-view="collection"] .header-tools-wrap .search:hover {
+  background: rgba(255, 235, 210, 0.11);
+  border-color: rgba(255, 235, 210, 0.24);
+}
+
+body[data-view="collection"] .header-tools-wrap .search:focus-within {
+  background: rgba(255, 235, 210, 0.13);
+  border-color: rgba(255, 235, 210, 0.42);
+  outline: none;
+}
+
+body[data-view="collection"] .header-tools-wrap .search .icon {
+  color: rgba(242, 234, 222, 0.78);
+}
+
+body[data-view="collection"] .header-tools-wrap .search input {
+  color: #f2eade;
+}
+
+body[data-view="collection"] .header-tools-wrap .search input::placeholder {
+  color: rgba(242, 234, 222, 0.52);
+}
+
+body[data-view="collection"] .header-tools-wrap .icon-btn {
+  color: #f2eade;
+}
+
+body[data-view="collection"] .header-tools-wrap .icon-btn:hover,
+body[data-view="collection"] .header-tools-wrap .icon-btn.is-active {
+  background: rgba(255, 235, 210, 0.12);
+}
+
+body[data-view="collection"] .header-tools-wrap .icon-count {
+  background: #f2eade;
+  color: #141210;
+}
+
+body[data-view="collection"] .header-tools-wrap .user-active-dot {
+  box-shadow: 0 0 0 2px #090a0c;
+}
+
+/* Light Theme (Catálogo) */
+body[data-view="catalog"] .header-tools-wrap .search {
+  background: var(--wash, #f4f3f0);
+  border-color: rgba(26, 23, 20, 0.08);
+  color: var(--ink, #1a1714);
+}
+
+body[data-view="catalog"] .header-tools-wrap .search:hover {
+  background: #eae8e4;
+  border-color: rgba(26, 23, 20, 0.16);
+}
+
+body[data-view="catalog"] .header-tools-wrap .search:focus-within {
+  background: #eae8e4;
+  border-color: var(--ink, #1a1714);
+  outline: none;
+}
+
+body[data-view="catalog"] .header-tools-wrap .search .icon {
+  color: var(--ink, #1a1714);
+}
+
+body[data-view="catalog"] .header-tools-wrap .search input {
+  color: var(--ink, #1a1714);
+}
+
+body[data-view="catalog"] .header-tools-wrap .search input::placeholder {
+  color: var(--muted, #6f6a64);
+}
+
+body[data-view="catalog"] .header-tools-wrap .icon-btn {
+  color: var(--ink, #1a1714);
+}
+
+body[data-view="catalog"] .header-tools-wrap .user-active-dot {
+  box-shadow: 0 0 0 2px #faf8f5;
+}
+
+/* View Stage & Panes */
+.view-stage {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+#view-gallery {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  overflow: hidden;
+  background: #08090b;
+  contain: strict;
+}
+
+#view-catalog {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  z-index: 20;
+  background: var(--paper, #faf8f5);
+  padding-top: 76px;
+  will-change: clip-path;
+}
+
+body[data-view="collection"] #view-catalog {
+  clip-path: inset(0 100% 0 0);
+  pointer-events: none;
+}
+
+body[data-view="catalog"]:not(.is-wiping) #view-catalog {
+  clip-path: none;
+  pointer-events: auto;
+}
+
+/* Constrain to viewport during wipe to slash GPU rasterization load by ~75% */
+body.is-wiping #view-catalog {
+  height: 100vh !important;
+  max-height: 100vh !important;
+  overflow: hidden !important;
+  contain: paint layout;
+  pointer-events: none;
+}
+
+/* Eliminate expensive backdrop blur filter during rapid wipe */
+body.is-wiping .unified-header {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* View-specific scroll and viewport control (Zero scrollbar shift between views) */
+html,
+body {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
+html[data-view="collection"],
+body[data-view="collection"],
+html:has(body[data-view="collection"]) {
+  height: 100vh !important;
+  max-height: 100vh !important;
+  overflow: hidden !important;
+}
+
+html[data-view="catalog"],
+body[data-view="catalog"],
+html:has(body[data-view="catalog"]) {
+  height: auto !important;
+  min-height: 100% !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+}
+
+html[data-view="catalog"].no-scroll,
+body[data-view="catalog"].no-scroll {
+  overflow: hidden !important;
+}
+
+/* Precision Luminous Wipe Line - Pure GPU translate3d */
+.wipe-line {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 2px;
+  background: #ffffff;
+  box-shadow: 
+    0 0 5px #ffffff,
+    0 0 12px rgba(238, 208, 168, 0.9),
+    0 0 24px rgba(212, 175, 55, 0.5);
+  z-index: 55;
+  pointer-events: none;
+  transform: translate3d(-10px, 0, 0);
+  will-change: transform, opacity;
+  opacity: 0;
+  transition: opacity 0.12s ease;
+  contain: strict;
+}
+
+body.is-wiping .wipe-line {
+  opacity: 1;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .unified-header {
+    height: 64px;
+    padding: 0 18px;
+  }
+  .brand-logo-link {
+    font-size: 16px;
+    letter-spacing: 0.3em;
+  }
+  .header-switcher {
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+  }
+  .segmented-control {
+    padding: 3px;
+  }
+  .segmented-btn {
+    min-width: 74px;
+    padding: 6px 10px;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+  }
+  .segmented-indicator {
+    top: 3px;
+    bottom: 3px;
+    left: 3px;
+    width: calc(50% - 3px);
+  }
+  #view-catalog {
+    padding-top: 64px;
+  }
+  .header-tools-wrap .search {
+    width: 130px;
+  }
+}

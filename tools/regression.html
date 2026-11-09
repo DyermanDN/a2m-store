@@ -1,0 +1,45 @@
+<!doctype html><html><head><meta charset="utf-8"><title>Gallery regression checks</title><style>body{font:14px system-ui;background:#151515;color:#eee}li{margin:6px}iframe{border:1px solid #555;display:block}h1{font-size:20px}</style></head><body><h1>Gallery interaction checks</h1><p id="status">Running…</p><ol id="results"></ol><iframe id="app" title="Gallery under test" width="1280" height="720" src="/" ></iframe><script>
+const frame=document.querySelector('#app');
+const results=document.querySelector('#results');
+const pause=ms=>new Promise(resolve=>setTimeout(resolve,ms));
+let failures=0;
+function check(condition,description){const li=document.createElement('li');li.textContent=(condition?'PASS — ':'FAIL — ')+description;results.append(li);if(!condition)failures++;}
+frame.addEventListener('load',async()=>{
+ try {
+  const doc=frame.contentDocument, win=frame.contentWindow;
+  const select=i=>doc.querySelectorAll('.fragrance-bay')[i].click();
+  const close=()=>doc.querySelector('#detail-close').click();
+  const title=()=>doc.querySelector('#detail-title').textContent;
+  await Promise.race([Promise.all([...doc.images].map(i=>i.decode())),new Promise((_,reject)=>setTimeout(()=>reject(Error('Image timeout')),10000))]);
+  check([...doc.images].every(i=>i.naturalWidth>0),'All five real product photographs decoded');
+  const names=['Lost Cherry','Rose Prick','Tobacco Vanille','Neroli Portofino','Oud Wood'];
+  for(let i=0;i<names.length;i++){
+   select(i); await pause(380);
+   const photo=doc.querySelectorAll('.bottle-stage')[i].getBoundingClientRect();
+   check(title()===names[i] && doc.querySelectorAll('.is-selected').length===1 && photo.left>=0 && photo.top>=60 && photo.right<win.innerWidth,'Open '+names[i]+' with matching details and visible product');
+   close();await pause(350);
+  }
+  select(0);select(2);select(4);close();await pause(400);
+  check(!doc.querySelector('#gallery-viewport').classList.contains('is-zoomed') && !doc.querySelector('#detail-card').classList.contains('is-visible') && [...doc.querySelectorAll('.product-display')].every(e=>!e.style.transform),'Rapid open/switch/close leaves no queued zoom or stale selection');
+  select(0);select(4);await pause(380);
+  check(title()==='Oud Wood' && doc.querySelectorAll('.is-selected').length===1,'Latest selection wins during interrupted animation');
+  close();select(0);doc.querySelector('#add-to-bag-btn').click();select(2);doc.querySelector('#add-to-bag-btn').click();doc.querySelector('#open-bag-btn').click();
+  check(doc.querySelector('#bag-total-price').textContent==='$705' && doc.querySelector('#bag-count').textContent==='2','Bag combines the correct real-product prices');
+  doc.querySelector('[data-remove="0"]').click();
+  check(doc.querySelector('#bag-total-price').textContent==='$300','Removing an item updates bag total');
+  win.dispatchEvent(new KeyboardEvent('keydown',{key:'Escape'}));
+  check(!doc.querySelector('.overlay-drawer.is-open') && !doc.querySelector('.fragrance-bay.is-selected'),'Escape closes modal and detail');
+  for(const [width,height] of [[390,844],[320,640],[1024,700]]){
+   frame.width=width;frame.height=height;await pause(350);
+   select(4);await pause(380);
+   const photo=doc.querySelectorAll('.bottle-stage')[4].getBoundingClientRect();
+   const card=doc.querySelector('#detail-card').getBoundingClientRect();
+   check(photo.left>=-1 && photo.right<=width+1 && photo.top>=60 && (width>900 || photo.bottom<=card.top+5) && card.left>=0 && card.right<=width+1,'Resized '+width+'×'+height+': product and details remain visible');
+   close();await pause(350);
+   check(doc.documentElement.scrollWidth<=width+1,'No horizontal overflow at '+width+'px');
+  }
+  document.querySelector('#status').textContent=failures?`${failures} FAILED`:'ALL CHECKS PASSED';
+  frame.width=390;frame.height=844;
+ }catch(error){document.querySelector('#status').textContent='ERROR: '+error.message;}
+},{once:true});
+</script></body></html>

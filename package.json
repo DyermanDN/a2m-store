@@ -1,0 +1,13 @@
+{
+  "name": "a2m-ecommerce",
+  "version": "1.0.0",
+  "description": "A2M Perfumes & Fragrances Store",
+  "type": "module",
+  "scripts": {
+    "start": "node server.mjs",
+    "db:setup": "node -e \"import('./db-postgres.mjs').then(m => m.initDatabase()).then(() => console.log('Database initialized successfully!')).catch(console.error)\""
+  },
+  "dependencies": {
+    "pg": "^8.13.1"
+  }
+}
