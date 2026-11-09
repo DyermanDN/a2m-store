@@ -219,10 +219,18 @@ export async function initDatabase() {
   }
 }
 
+let dbReady = false;
 let dbInitPromise = null;
 export async function ensureDbReady() {
+  if (dbReady) return;
+  if (isRemoteDb) {
+    dbReady = true;
+    return;
+  }
   if (!dbInitPromise) {
-    dbInitPromise = initDatabase().catch(err => {
+    dbInitPromise = initDatabase().then(() => {
+      dbReady = true;
+    }).catch(err => {
       dbInitPromise = null;
       console.warn('PostgreSQL initialization warning:', err.message);
     });

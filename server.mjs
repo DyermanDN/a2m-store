@@ -81,6 +81,9 @@ function sendJson(res, statusCode, data, extraHeaders = {}) {
   res.writeHead(statusCode, {
     'Content-Type': 'application/json; charset=utf-8',
     'Content-Length': Buffer.byteLength(json),
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+    'Access-Control-Allow-Headers': 'Content-Type, Authorization',
     ...extraHeaders
   });
   res.end(json);
@@ -119,6 +122,16 @@ function parseJsonBody(req) {
 }
 
 export async function handleApiRequest(req, res) {
+  if (req.method === 'OPTIONS') {
+    res.writeHead(204, {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+      'Access-Control-Allow-Headers': 'Content-Type, Authorization'
+    });
+    res.end();
+    return;
+  }
+
   let parsedUrl;
   try {
     parsedUrl = new URL(req.url || '/', 'http://localhost');
@@ -126,7 +139,17 @@ export async function handleApiRequest(req, res) {
     res.writeHead(400); res.end('Bad request'); return;
   }
 
-  const pathname = decodeURIComponent(parsedUrl.pathname);
+  // Support Vercel rewrite params (?__api_path=...), headers, or standard pathname
+  let rawPath = parsedUrl.searchParams.get('__api_path') ||
+                req.headers['x-matched-path'] ||
+                req.headers['x-forwarded-url'] ||
+                parsedUrl.pathname;
+
+  let pathname = decodeURIComponent(rawPath.split('?')[0]);
+  if (!pathname.startsWith('/')) pathname = '/' + pathname;
+  if (!pathname.startsWith('/api')) {
+    pathname = '/api' + pathname;
+  }
 
   try {
     await ensureDbReady();
