@@ -69,8 +69,9 @@
       el.className = 'auth-feedback';
       return;
     }
+    const text = typeof message === 'string' ? message : (message.message || JSON.stringify(message));
     el.hidden = false;
-    el.textContent = message;
+    el.textContent = text;
     el.className = `auth-feedback is-${type}`;
   }
 
