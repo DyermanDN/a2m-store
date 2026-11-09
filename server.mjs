@@ -479,20 +479,38 @@ export async function handleAppRequest(req, res) {
   }
 }
 
+// Hints for Vercel Node File Trace (@vercel/nft) to bundle static files
+export const _NFT_STATIC_HINTS = [
+  path.join(__dirname, 'index.html'),
+  path.join(__dirname, 'catalog.html'),
+  path.join(__dirname, 'admin.html'),
+  path.join(__dirname, 'styles.css'),
+  path.join(__dirname, 'catalog.css'),
+  path.join(__dirname, 'admin.css'),
+  path.join(__dirname, 'auth.css'),
+  path.join(__dirname, 'gallery.css'),
+  path.join(__dirname, 'wipe.css'),
+  path.join(__dirname, 'storefront.js'),
+  path.join(__dirname, 'catalog.js'),
+  path.join(__dirname, 'admin.js'),
+  path.join(__dirname, 'auth.js'),
+  path.join(__dirname, 'rain-engine.js'),
+  path.join(__dirname, 'wipe.js'),
+  path.join(__dirname, 'catalog-data.js'),
+  path.join(__dirname, 'assets')
+];
+
 export const server = http.createServer(handleAppRequest);
 export default handleAppRequest;
 
-if (!process.env.VERCEL) {
-  initDatabase()
-    .then(() => {
-      console.log('PostgreSQL schema verified & ready.');
-    })
-    .catch((err) => {
-      console.warn('Warning: Could not auto-initialize PostgreSQL schema:', err.message);
-    })
-    .finally(() => {
-      server.listen(PORT, '0.0.0.0', () => {
-        console.log(`A2M Server + API running at http://localhost:${PORT}`);
-      });
-    });
+const isMainEntrypoint = Boolean(
+  !process.env.VERCEL &&
+  process.argv[1] &&
+  path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)
+);
+
+if (isMainEntrypoint) {
+  server.listen(PORT, '0.0.0.0', () => {
+    console.log(`A2M Server + API running at http://localhost:${PORT}`);
+  });
 }
